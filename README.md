@@ -13,6 +13,8 @@ git checkout
 # Move or use the folder
 cd architecture2
 ```
+
+
 then
 ```
 docker compose up -d
