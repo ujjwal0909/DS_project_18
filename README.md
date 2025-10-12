@@ -4,13 +4,12 @@ This is the repository for the project 2 of the distributed systems.
 Pull the subfolder with sparse-checkout
 ```
 cd ~/Desktop
+rm -rf ds_tmp
 git clone --no-checkout https://github.com/sifatuddin99289/DS_project_2.git ds_tmp
 cd ds_tmp
 git sparse-checkout init --cone
 git sparse-checkout set architecture2
 git checkout
-
-# Move or use the folder
 cd architecture2
 ```
 
