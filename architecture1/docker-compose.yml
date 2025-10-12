@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: .
+    container_name: arch1-gateway
+    ports:
+      - "5000:5000"
+    command: python api_gateway.py
+    networks:
+      - net
+
+  dashboard:
+    build: .
+    container_name: arch1-dashboard
+    ports:
+      - "5001:5001"
+    command: python dashboard.py
+    networks:
+      - net
+
+  sensor1:
+    build: .
+    container_name: arch1-sensor1
+    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_001', 'temperature', 'http://gateway:5000')"
+    networks:
+      - net
+
+  sensor2:
+    build: .
+    container_name: arch1-sensor2
+    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_002', 'temperature', 'http://gateway:5000')"
+    networks:
+      - net
+
+  sensor3:
+    build: .
+    container_name: arch1-sensor3
+    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_003', 'humidity', 'http://gateway:5000')"
+    networks:
+      - net
+
+networks:
+  net:
