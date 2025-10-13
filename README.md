@@ -10,7 +10,7 @@ docker compose down -v
 docker compose up -d --build
 
 ```
-#For the evaluation part run the evaluate_1.py scripts in the project directory: 
+# For the evaluation part run the evaluate_1.py scripts in the project directory: 
 
 ```
 python evaluate_1.py
