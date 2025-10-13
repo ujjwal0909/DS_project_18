@@ -6,7 +6,9 @@ Pull the subfolder with sparse-checkout
 ```
 git clone --no-checkout https://github.com/sifatuddin99289/DS_project_2.git
 cd architecture1_layered 
-docker compose up -d 
+docker compose down -v
+docker compose up -d --build
+
 ```
 
 # To execute the architecture-2 (microservice with gRPC), follow the command line
