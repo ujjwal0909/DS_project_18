@@ -74,7 +74,7 @@ docker compose -f compose.grpc.yml up -d --scale ingestion=3 --scale aggregator=
 #   Password: postgres
 # Create a dashboard to plot temperature & humidity vs time.
 ```
-# ===============================
-# 🔚  Clean shutdown when done
-# ===============================
+Clean shutdown when done
+```
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
+```
