@@ -47,10 +47,6 @@ Query historical data
  ```
 go run client/query_client.go
 ```
-Scale to ≥5 distributed nodes
-```
-docker compose -f compose.grpc.yml up -d --scale ingestion=2 --scale aggregator=2
-```
 Shut down everything cleanly
 ```
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
