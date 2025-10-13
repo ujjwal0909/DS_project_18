@@ -1,7 +1,7 @@
 # DS_project_2
 This is the repository for the project 2 of the distributed systems. 
 
-# To execute the architecture-1 (Layered architecture with HTTP), follow the command line
+## To execute the architecture-1 (Layered architecture with HTTP), follow the command line
 Pull the subfolder with sparse-checkout
 ```
 git clone --no-checkout https://github.com/sifatuddin99289/DS_project_2.git
@@ -10,7 +10,7 @@ docker compose down -v
 docker compose up -d --build
 
 ```
-# For the evaluation part run the evaluate_1.py scripts in the project directory: 
+## For the evaluation part run the evaluate_1.py scripts in the project directory: 
 
 ```
 python evaluate_1.py
