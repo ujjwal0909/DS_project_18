@@ -5,7 +5,7 @@ This is the repository for the project 2 of the distributed systems.
 Pull the subfolder with sparse-checkout
 ```
 git clone --no-checkout https://github.com/sifatuddin99289/DS_project_2.git
-cd architecture1_layered 
+cd architecture1
 docker compose down -v
 docker compose up -d --build
 
