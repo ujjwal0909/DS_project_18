@@ -16,6 +16,7 @@ Pull the subfolder with sparse-checkout
 Clone the repository
 ```
 cd ~/Desktop
+rm -rf DS_project_2
 git clone https://github.com/sifatuddin99289/DS_project_2.git
 cd DS_project_2/architecture2
 ```
