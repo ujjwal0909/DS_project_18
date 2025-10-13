@@ -24,37 +24,28 @@ Pull the subfolder with sparse-checkout
 Clone the repository
 ```
 cd ~/Desktop
-rm -rf DS_project_2
-git clone https://github.com/sifatuddin99289/DS_project_2.git
-cd DS_project_2/architecture2
-```
- Verify Go dependencies
-```
-go mod tidy
-```
-Regenerate protobuf stubs
-```
-protoc --go_out=. --go-grpc_out=. proto/telemetry.proto
+rm -rf ds_tmp
+git clone --no-checkout https://github.com/sifatuddin99289/DS_project_2.git ds_tmp
+cd ds_tmp
+git sparse-checkout init --cone
+git sparse-checkout set architecture2
+git checkout
+cd architecture2
 ```
 Clean previous containers (if any)
 ```
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
 ```
-Build all Dockerized microservices
+Build and Run the gRPC Microservice Architecture
 ```
-docker compose -f compose.grpc.yml build --no-cache
+# Ensure Docker is running
+docker compose -f compose.grpc.yml up -d --build
 ```
-Launch the full distributed stack
-```
-docker compose -f compose.grpc.yml up -d
-```
-Confirm all nodes are running
-```
-docker compose -f compose.grpc.yml ps
-```
-
 Run your gRPC clients
-
+```
+# To confirm they’re running
+docker ps
+```
 Send 5 fake IoT sensor readings
 ```
 go run client/test_client.go
@@ -67,17 +58,10 @@ Watch alerts for high temperatures
 ```
 go run client/alert_client.go
 ```
-Access Grafana dashboard (visualization)
+Performance analysis
 ```
-# Open in your browser:
-# 👉 http://localhost:3000
-# Login:  admin / admin
-# Add a PostgreSQL datasource:
-#   Host: timescaledb:5432
-#   Database: postgres
-#   User: postgres
-#   Password: postgres
-# Create a dashboard to plot temperature & humidity vs time.
+python3 benchmark_grpc.py
+
 ```
 Clean shutdown when done
 ```
