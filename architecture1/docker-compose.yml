@@ -1,44 +1,54 @@
-version: '3.8'
-
+# docker-compose.yml  (2-space indentation)
 services:
-  gateway:
-    build: .
-    container_name: arch1-gateway
+  api:
+    build:
+      context: ./api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
     ports:
-      - "5000:5000"
-    command: python api_gateway.py
-    networks:
-      - net
+      - "8000:8000"
+    environment:
+      APP_URL: http://app:8001
+    depends_on:
+      - app
 
-  dashboard:
-    build: .
-    container_name: arch1-dashboard
-    ports:
-      - "5001:5001"
-    command: python dashboard.py
-    networks:
-      - net
+  app:
+    build:
+      context: ./app
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
+    environment:
+      DATA_URL: http://data:8002
+      REDIS_HOST: redis
+    depends_on:
+      - data
+      - redis
 
-  sensor1:
-    build: .
-    container_name: arch1-sensor1
-    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_001', 'temperature', 'http://gateway:5000')"
-    networks:
-      - net
+  data:
+    build:
+      context: ./data
+    command: uvicorn main:app --host 0.0.0.0 --port 8002
+    environment:
+      PGHOST: postgres
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: ds
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  sensor2:
-    build: .
-    container_name: arch1-sensor2
-    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_002', 'temperature', 'http://gateway:5000')"
-    networks:
-      - net
+  redis:
+    image: redis:7
+    # no host port needed
 
-  sensor3:
-    build: .
-    container_name: arch1-sensor3
-    command: python -c "from sensor_simulator import simulate_sensor; simulate_sensor('sensor_003', 'humidity', 'http://gateway:5000')"
-    networks:
-      - net
-
-networks:
-  net:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ds
+    # no host port needed
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ds"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
