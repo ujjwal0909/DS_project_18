@@ -13,11 +13,9 @@ docker compose up -d
 Pull the subfolder with sparse-checkout
 
 
-Clone your project
-
+Clone the repository
 ```
 cd ~/Desktop
-rm -rf DS_project_2
 git clone https://github.com/sifatuddin99289/DS_project_2.git
 cd DS_project_2/architecture2
 ```
@@ -25,31 +23,58 @@ cd DS_project_2/architecture2
 ```
 go mod tidy
 ```
-  Regenerate proto files (optional safety)
+Regenerate protobuf stubs
 ```
 protoc --go_out=. --go-grpc_out=. proto/telemetry.proto
 ```
- Build and launch all services via Docker
+Clean previous containers (if any)
 ```
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
+```
+Build all Dockerized microservices
+```
 docker compose -f compose.grpc.yml build --no-cache
+```
+Launch the full distributed stack
+```
 docker compose -f compose.grpc.yml up -d
 ```
- Confirm all containers are running
+Confirm all nodes are running
 ```
-docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+docker compose -f compose.grpc.yml ps
 ```
- Run your test clients
+
+Run your gRPC clients
+
+Send 5 fake IoT sensor readings
 ```
 go run client/test_client.go
 ```
-Query historical data
- ```
+Query historical sensor data
+```
 go run client/query_client.go
 ```
-Shut down everything cleanly
+Watch alerts for high temperatures
 ```
+go run client/alert_client.go
+```
+Scale horizontally (≥5 nodes)
+```
+docker compose -f compose.grpc.yml up -d --scale ingestion=3 --scale aggregator=3
+```
+ Access Grafana dashboard (visualization)
+```
+# Open in your browser:
+# 👉 http://localhost:3000
+# Login:  admin / admin
+# Add a PostgreSQL datasource:
+#   Host: timescaledb:5432
+#   Database: postgres
+#   User: postgres
+#   Password: postgres
+# Create a dashboard to plot temperature & humidity vs time.
+```
+# ===============================
+# 🔚  Clean shutdown when done
+# ===============================
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
-
-```
-
