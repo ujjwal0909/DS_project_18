@@ -59,11 +59,7 @@ Watch alerts for high temperatures
 ```
 go run client/alert_client.go
 ```
-Scale horizontally (≥5 nodes)
-```
-docker compose -f compose.grpc.yml up -d --scale ingestion=3 --scale aggregator=3
-```
- Access Grafana dashboard (visualization)
+Access Grafana dashboard (visualization)
 ```
 # Open in your browser:
 # 👉 http://localhost:3000
