@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package consensus.twopc;
+
+message VoteRequest {
+  string coordinator_id = 1;
+  string participant_id = 2;
+  string transaction_id = 3;
+  string payload = 4;
+}
+
+message VoteResponse {
+  string participant_id = 1;
+  string transaction_id = 2;
+  bool commit = 3;
+  string reason = 4;
+}
+
+message DecisionRequest {
+  string coordinator_id = 1;
+  string participant_id = 2;
+  string transaction_id = 3;
+  bool commit = 4;
+  string payload = 5;
+}
+
+message DecisionAck {
+  string participant_id = 1;
+  string transaction_id = 2;
+  bool committed = 3;
+  string message = 4;
+}
+
+service VotingPhase {
+  rpc RequestVote(VoteRequest) returns (VoteResponse);
+}
+
+service DecisionPhase {
+  rpc DeliverDecision(DecisionRequest) returns (DecisionAck);
+}

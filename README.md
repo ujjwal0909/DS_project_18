@@ -36,6 +36,36 @@ Clean previous containers (if any)
 ```
 docker compose -f compose.grpc.yml down --volumes --remove-orphans
 ```
+
+## Consensus algorithms (2PC and Raft)
+
+The `consensus/` directory contains a lightweight reference implementation of
+the assignment requirements. The solution simulates gRPC-style interactions
+using a minimal JSON-over-TCP RPC layer so it can run in restricted execution
+environments. Each node exposes the following capabilities:
+
+* Voting and decision phases of the two-phase commit protocol.
+* Leader election and log replication for a simplified Raft cluster.
+* A CLI entrypoint (`python -m consensus.run_node`) for starting a node.
+* A comprehensive pytest suite covering five Raft scenarios plus 2PC abort
+  behaviour.
+
+### Running the test suite
+
+```
+cd consensus
+pytest
+```
+
+### Starting a local cluster
+
+```
+python -m consensus.run_node n1 127.0.0.1 5600 --peers '{"n2": "127.0.0.1:5601", "n3": "127.0.0.1:5602"}'
+```
+
+Start additional nodes with matching peer maps. Once the nodes are running you
+can execute two-phase commit transactions and Raft client commands using the
+`consensus.tests.test_consensus.Cluster` helper as a reference.
 Build and Run the gRPC Microservice Architecture
 ```
 # Ensure Docker is running
